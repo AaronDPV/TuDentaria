@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Dentaria</title>
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Raleway:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- CSS Personalizado -->
+    <link href="../css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <span><i class="fas fa-phone"></i> 913 359 948</span>
+                <span class="ms-3"><i class="fas fa-envelope"></i> info@tudentaria.com</span>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/tu.dentaria/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@tudentaria" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                <a href="https://wa.me/913359948" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!--  NAVBAR  -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+            <div class="container">
+                <a th:href="@{/}" class="navbar-brand">
+                    <img th:src="@{/img/logo.png}" alt="TuDentaria" height="80">
+                </a>
+
+                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="navbar-nav ms-auto align-items-lg-center w-100 justify-content-lg-end">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/servicios}">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/blog}">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link active" th:href="@{/contacto}">Contacto</a></li>
+
+                        <th:block sec:authorize="isAnonymous()">
+                            <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                                <a th:href="@{/login}" class="btn btn-outline-dark px-3 py-2 small fw-bold rounded-1 d-block d-lg-inline-block text-center shadow-sm">
+                                    <i class="fas fa-sign-in-alt me-1"></i> Ingresar
+                                </a>
+                            </li>
+                            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                                <a th:href="@{/registro}" class="btn btn-info text-white px-3 py-2 small fw-bold rounded-1 d-block d-lg-inline-block text-center shadow-sm"
+                                   style="background-color: #00BCD4; border-color: #00BCD4;">
+                                    <i class="fas fa-user-plus me-1"></i> Registrarse
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="isAuthenticated()">
+                            <li class="nav-item dropdown ms-lg-3 mt-3 mt-lg-0">
+                                <a class="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center justify-content-between justify-content-lg-start"
+                                   href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #1f4b61 !important;">
+                                <span class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle fa-lg me-2 text-info"></i>
+                                    <span sec:authentication="name">Usuario</span>
+                                </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-2 mt-2" aria-labelledby="userDropdown">
+                                    <li sec:authorize="hasRole('ADMIN')">
+                                        <a class="dropdown-item small fw-semibold py-2" th:href="@{/admin/dashboard}">
+                                            <i class="fas fa-tachometer-alt me-2 text-muted"></i>Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item small fw-semibold py-2" th:href="@{/perfil}">
+                                            <i class="fas fa-id-card me-2 text-muted"></i>Mi Perfil
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form th:action="@{/logout}" method="POST" class="px-3 py-1">
+                                            <button type="submit" class="btn btn-sm btn-danger w-100 fw-bold text-start text-white">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div th:if="${param.logout}" id="logout-alert" class="container mt-3">
+        <div class="alert alert-dismissible fade show border-0 shadow-sm d-flex align-items-center py-2.5 px-3" role="alert"
+             style="background-color: #def7ec; color: #03543f; border-radius: 6px; font-size: 0.9rem;">
+            <i class="fas fa-check-circle fa-lg me-2"></i>
+            <div>
+                Se cerró la sesión **correctamente**. ¡Vuelve pronto a TuDentaria!
+            </div>
+            <button type="button" class="btn-close small" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.85rem 1rem;"></button>
+        </div>
+    </div>
+
+    <section class="page-title bg-light py-5 text-center text-md-start">
+        <div class="container">
+            <h1 class="fw-bold display-5 mb-2">Contacto</h1>
+            <p class="text mb-0">Inicio / Contacto</p>
+        </div>
+    </section>
+
+    <section class="contact-page-section py-5 bg-light">
+        <div class="container" style="max-width: 850px;">
+
+            <div class="section-header text-center mb-5">
+                <span class="section-subtitle d-block fw-bold mb-2 text-uppercase small" style="color: #00BCD4; letter-spacing: 1.5px;">CONTÁCTANOS</span>
+                <h2 class="section-title fw-bold text-uppercase mb-3">Solicita una Cita</h2>
+                <p class="section-description text-muted mx-auto" style="max-width: 700px; font-size: 0.9rem;">
+                    Completa el siguiente formulario y te contactaremos durante nuestro horario de atención. Si tienes una emergencia dental, por favor llama al <strong class="text-dark">913 359 948</strong>. La atención de urgencia suele prestarse el mismo día.
+                </p>
+            </div>
+
+            <!-- Alertas de Éxito o Error -->
+            <div th:if="${exitoCita}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle me-2"></i> <span th:text="${exitoCita}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            <div th:if="${errorCita}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${errorCita}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Formulario Vinculado a la misma acción de guardar -->
+            <form th:action="@{/solicitar-cita}" th:object="${cita}" method="POST" class="contact-form bg-white p-4 p-md-5 shadow-sm" style="border-radius: 8px;">
+                <div class="row g-4">
+
+                    <div class="col-md-6 form-group">
+                        <input type="text" th:field="*{nombre}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Nombre" style="font-size: 0.9rem;">
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <input type="text" th:field="*{apellido}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Apellido" style="font-size: 0.9rem;">
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <input type="tel" th:field="*{telephone}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Número de Teléfono" style="font-size: 0.9rem;">
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <input type="email" th:field="*{email}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="E-mail" style="font-size: 0.9rem;">
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <input type="text" th:field="*{motivo}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Motivo de tu visita" style="font-size: 0.9rem;">
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}"></div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <input type="date" th:field="*{fecha}" class="form-control rounded-1 border-secondary-subtle py-2.5" style="font-size: 0.9rem; color: #6c757d;">
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+                    </div>
+
+                    <div class="col-12 form-group">
+                        <textarea th:field="*{notas}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Notas para el doctor" rows="6" style="font-size: 0.9rem; resize: none;"></textarea>
+                        <div class="text-danger small mt-1" th:if="${#fields.hasErrors('notas')}" th:errors="*{notas}"></div>
+                    </div>
+
+                    <div class="col-12 text-center mt-4">
+                        <button type="submit" class="btn btn-outline-dark px-5 py-2.5 fw-bold rounded-1 btn-form text-uppercase"
+                                style="transition: 0.3s; letter-spacing: 1px; font-size: 0.9rem;"
+                                onmouseover="this.style.backgroundColor='#00BCD4'; this.style.borderColor='#00BCD4'; this.style.color='white'"
+                                onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#212529'; this.style.color='#212529'">
+                            SOLICITAR CITA
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <section class="social-section py-5 bg-white">
+        <div class="container text-center">
+            
+            <div class="section-header mb-4">
+                <h2 class="section-title fw-bold" style="color: #2C3E50; font-size: 2rem;">Nuestras Redes</h2>
+            </div>
+            
+            <div class="row g-3 justify-content-center mx-auto" style="max-width: 900px;">
+                
+                <div class="col-6 col-md-3">
+                    <a href="https://www.facebook.com" target="_blank" 
+                       class="d-flex align-items-center justify-content-center text-white w-100 fs-4 text-decoration-none" 
+                       style="height: 75px; background-color: #4A6582; border-radius: 8px; transition: 0.3s;"
+                       onmouseover="this.style.backgroundColor='#00BCD4'"
+                       onmouseout="this.style.backgroundColor='#4A6582'">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <a href="https://www.instagram.com/tu.dentaria/" target="_blank" 
+                       class="d-flex align-items-center justify-content-center text-white w-100 fs-4 text-decoration-none" 
+                       style="height: 75px; background-color: #4A6582; border-radius: 8px; transition: 0.3s;"
+                       onmouseover="this.style.backgroundColor='#00BCD4'"
+                       onmouseout="this.style.backgroundColor='#4A6582'">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <a href="https://www.linkedin.com" target="_blank" 
+                       class="d-flex align-items-center justify-content-center text-white w-100 fs-4 text-decoration-none" 
+                       style="height: 75px; background-color: #4A6582; border-radius: 8px; transition: 0.3s;"
+                       onmouseover="this.style.backgroundColor='#00BCD4'"
+                       onmouseout="this.style.backgroundColor='#4A6582'">
+                        <i class="fab fa-linkedin-in fw-bold"></i>
+                    </a>
+                </div>
+                
+                <div class="col-6 col-md-3">
+                    <a href="https://www.youtube.com" target="_blank" 
+                       class="d-flex align-items-center justify-content-center text-white w-100 fs-4 text-decoration-none" 
+                       style="height: 75px; background-color: #4A6582; border-radius: 8px; transition: 0.3s;"
+                       onmouseover="this.style.backgroundColor='#00BCD4'"
+                       onmouseout="this.style.backgroundColor='#4A6582'">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+    
+
+        <!--  FOOTER  -->
+    <footer class="footer pt-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <img th:src="@{/img/logo.png}" alt="Tu Dentaria Logo" class="footer-logo">
+                    <p>Somos una clínica dental moderna, especializada en diagnósticos y tratamientos avanzados para profesionales de la salud.</p>
+                    <a th:href="@{/contacto}" class="btn-footer">Atención al Cliente</a>
+                </div>
+                <div class="col-md-4">
+                    <h4>Nuestros Servicios</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="servicios.html#servicios">Periodoncia</a></li>
+                        <li><a href="servicios.html#servicios">Cirugía Dental</a></li>
+                        <li><a href="servicios.html#servicios">Implantes dentales</a></li>
+                        <li><a href="servicios.html#servicios">Estética Dental</a></li>
+                        <li><a href="servicios.html#servicios">Ortodoncia</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4>Horarios</h4>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><span>Lunes - Viernes</span> <span>8:00 -
+                                18:00</span></li>
+                        <li class="d-flex justify-content-between"><span>Sábado</span> <span>9:00 - 13:00</span></li>
+                        <li class="d-flex justify-content-between"><span>Domingo</span> <span>Cerrado</span></li>
+                    </ul>
+
+                    <h4 class="mt-4">Redes Sociales</h4>
+                    <div class="d-flex gap-3">
+                        <a href="https://www.instagram.com/tu.dentaria/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@tudentaria" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/913359948" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center mt-4 py-3">
+            <p class="mb-0">&copy; 2026 TuDentaria. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <a href="#" class="scroll-up">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script src="../scripts/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

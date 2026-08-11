@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Doctores - Tu Dentaria</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root { --sidebar-width: 260px; --primary-color: #1f4b61; --bg-light: #f4f7f6; }
+    body { background-color: var(--bg-light); font-family: 'Segoe UI', sans-serif; }
+    .sidebar { width: var(--sidebar-width); height: 100vh; position: fixed; top: 0; left: 0; background-color: #1e293b; color: #cbd5e1; z-index: 100; }
+    .sidebar-brand { padding: 1.2rem 1rem; background-color: #111827; border-bottom: 1px solid #1f2937; display: flex; align-items: center; justify-content: center; }
+    .sidebar-brand img { max-height: 45px; }
+    .sidebar-menu { padding: 1rem 0; list-style: none; margin: 0; }
+    .menu-header { padding: 0.6rem 1.5rem 0.3rem 1.5rem; font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700; }
+    .menu-item a { display: flex; align-items: center; padding: 0.7rem 1.5rem; color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
+    .menu-item a:hover, .menu-item.active a { color: #fff; background-color: #334155; }
+    .menu-item a i { width: 24px; margin-right: 10px; }
+    .main-content { margin-left: var(--sidebar-width); padding: 2rem; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-brand"><img th:src="@{/img/logo.png}" alt="Logo"></div>
+  <ul class="sidebar-menu">
+    <li class="menu-item"><a th:href="@{/admin/dashboard}"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+    <li class="menu-header">Atención</li>
+    <li class="menu-item"><a th:href="@{/admin/citas}"><i class="fas fa-calendar-check"></i> Citas</a></li>
+    <li class="menu-header">Personal Clínico</li>
+    <li class="menu-item active"><a th:href="@{/admin/doctores}"><i class="fas fa-stethoscope"></i> Doctores</a></li>
+    <li class="menu-header">Seguridad</li>
+    <li class="menu-item"><a th:href="@{/admin/usuarios}"><i class="fas fa-user-plus"></i> Crear Cuentas</a></li>
+    <li class="menu-header">Portal</li>
+    <li class="menu-item"><a th:href="@{/}"><i class="fas fa-arrow-left"></i> Volver a la Web</a></li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold m-0" style="color: var(--primary-color);">Plantel de Doctores</h3>
+      <p class="text-muted small m-0">Administra el personal clínico y sus fotografías de perfil</p>
+    </div>
+    <button class="btn btn-sm btn-primary px-3" onclick="nuevoDoctor()">
+      <i class="fas fa-plus-circle me-1"></i> Agregar Doctor
+    </button>
+  </div>
+
+  <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <div class="card border-0 shadow-sm p-4">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle m-0">
+        <thead class="table-light">
+        <tr>
+          <th>Foto</th>
+          <th>Nombre Completo</th>
+          <th>Especialidad</th>
+          <th class="text-end">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${doctores}">
+          <td>
+            <img th:src="${d.imagen != null} ? @{'/uploads/' + ${d.imagen}} : @{/img/default-doctor.jpg}"
+                 style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%;">
+          </td>
+          <td class="fw-bold" th:text="${d.nombre}">Nombre</td>
+          <td th:text="${d.especialidad}">Especialidad</td>
+          <td class="text-end">
+            <button class="btn btn-sm btn-outline-warning"
+                    th:data-id="${d.id}" th:data-nombre="${d.nombre}" th:data-especialidad="${d.especialidad}"
+                    onclick="editarDoctor(this)">
+              <i class="fas fa-edit"></i>
+            </button>
+            <a th:href="@{/admin/doctores/eliminar/{id}(id=${d.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar este doctor?')">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DOCTOR -->
+<div class="modal fade" id="modalDoctor" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalTitulo">Nuevo Doctor</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form th:action="@{/admin/doctores/guardar}" th:object="${doctor}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}" id="docId">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Nombre Completo</label>
+            <input type="text" th:field="*{nombre}" id="docNombre" class="form-control form-control-sm" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Especialidad</label>
+            <input type="text" th:field="*{especialidad}" id="docEspecialidad" class="form-control form-control-sm" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Fotografía Perfil</label>
+            <input type="file" name="file" id="docFile" class="form-control form-control-sm" accept="image/*">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  var bootstrapModal = new bootstrap.Modal(document.getElementById('modalDoctor'));
+
+  function nuevoDoctor() {
+      document.getElementById('docId').value = '';
+      document.getElementById('docNombre').value = '';
+      document.getElementById('docEspecialidad').value = '';
+      document.getElementById('docFile').required = true;
+      document.getElementById('modalTitulo').innerText = 'Agregar Doctor';
+      bootstrapModal.show();
+  }
+
+  function editarDoctor(btn) {
+      document.getElementById('docId').value = btn.getAttribute('data-id');
+      document.getElementById('docNombre').value = btn.getAttribute('data-nombre');
+      document.getElementById('docEspecialidad').value = btn.getAttribute('data-especialidad');
+      document.getElementById('docFile').required = false;
+      document.getElementById('modalTitulo').innerText = 'Editar Doctor';
+      bootstrapModal.show();
+  }
+</script>
+</body>
+</html>

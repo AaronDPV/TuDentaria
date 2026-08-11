@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Dentaria</title>
+    <!-- Favicon corregido -->
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <!-- CSS Personalizado usando Thymeleaf -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div>
+                <span><i class="fas fa-phone"></i> 913 359 948</span>
+                <span class="ms-3"><i class="fas fa-envelope"></i> info@tudentaria.com</span>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/tu.dentaria/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@tudentaria" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                <a href="https://wa.me/913359948" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!--  NAVBAR  -->
+    <header>
+        <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+            <div class="container">
+                <a th:href="@{/}" class="navbar-brand">
+                    <img th:src="@{/img/logo.png}" alt="TuDentaria" height="80">
+                </a>
+
+                <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="navbar-nav ms-auto align-items-lg-center w-100 justify-content-lg-end">
+                        <li class="nav-item"><a class="nav-link active" th:href="@{/}">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/nosotros}">Nosotros</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/servicios}">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/blog}">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
+
+                        <th:block sec:authorize="isAnonymous()">
+                            <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                                <a th:href="@{/login}" class="btn btn-outline-dark px-3 py-2 small fw-bold rounded-1 d-block d-lg-inline-block text-center shadow-sm">
+                                    <i class="fas fa-sign-in-alt me-1"></i> Ingresar
+                                </a>
+                            </li>
+                            <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                                <a th:href="@{/registro}" class="btn btn-info text-white px-3 py-2 small fw-bold rounded-1 d-block d-lg-inline-block text-center shadow-sm"
+                                   style="background-color: #00BCD4; border-color: #00BCD4;">
+                                    <i class="fas fa-user-plus me-1"></i> Registrarse
+                                </a>
+                            </li>
+                        </th:block>
+
+                        <th:block sec:authorize="isAuthenticated()">
+                            <li class="nav-item dropdown ms-lg-3 mt-3 mt-lg-0">
+                                <a class="nav-link dropdown-toggle fw-bold text-dark d-flex align-items-center justify-content-between justify-content-lg-start"
+                                   href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #1f4b61 !important;">
+                                <span class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle fa-lg me-2 text-info"></i>
+                                    <span sec:authentication="name">Usuario</span>
+                                </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-2 mt-2" aria-labelledby="userDropdown">
+                                    <li sec:authorize="hasRole('ADMIN')">
+                                        <a class="dropdown-item small fw-semibold py-2" th:href="@{/admin/dashboard}">
+                                            <i class="fas fa-tachometer-alt me-2 text-muted"></i>Dashboard
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item small fw-semibold py-2" th:href="@{/perfil}">
+                                            <i class="fas fa-id-card me-2 text-muted"></i>Mi Perfil
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form th:action="@{/logout}" method="POST" class="px-3 py-1">
+                                            <button type="submit" class="btn btn-sm btn-danger w-100 fw-bold text-start text-white">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div th:if="${param.logout}" id="logout-alert" class="container mt-3">
+        <div class="alert alert-dismissible fade show border-0 shadow-sm d-flex align-items-center py-2.5 px-3" role="alert"
+             style="background-color: #def7ec; color: #03543f; border-radius: 6px; font-size: 0.9rem;">
+            <i class="fas fa-check-circle fa-lg me-2"></i>
+            <div>
+                Se cerró la sesión **correctamente**. ¡Vuelve pronto a TuDentaria!
+            </div>
+            <button type="button" class="btn-close small" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.85rem 1rem;"></button>
+        </div>
+    </div>
+    <!--  HERO -->
+    <div class="hero">
+        <video th:src="@{/video/consultorio.mp4}" autoplay loop muted class="hero-video"></video>
+        <div class="hero-overlay">
+            <h1>Una Sonrisa Saludable, Una Vida Feliz</h1>
+        </div>
+    </div>
+
+    <!--  NOSOTROS  -->
+    <section class="nosotros container py-6">
+        <div class="row align-items-center">
+            <div class="col-md-5 text-center mb-4 mb-md-0 pe-md-5">
+                <img th:src="@{/img/nosotros.jpg}"
+                     alt="Equipo de Tu Dentaria"
+                     class="img-fluid rounded-circle shadow"
+                     style="aspect-ratio: 1 / 1; object-fit: cover;">
+            </div>
+
+            <div class="col-md-7">
+                <span class="section-subtitle text-uppercase fw-bold text-info">Bienvenido a TuDentaria</span>
+                <h3 class="section-title display-6 fw-normal">Creamos Sonrisas Hermosas</h3>
+                <p class="lead-sm text-muted">
+                    En "Tu Dentaria", nos dedicamos a ofrecer una atención odontológica personalizada,
+                    asegurando que cada paciente se sienta cómodo y satisfecho con los tratamientos recibidos.
+                    Creemos en la importancia de escuchar y entender las necesidades individuales de cada paciente
+                    para proporcionar el mejor cuidado posible.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!--  SERVICIOS DESTACADOS  -->
+    <section class="services-showcase py-5" style="background-color: #7a7a7a;">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gx-4 gy-4 justify-content-center">
+                
+                <div class="col text-center d-flex flex-column align-items-center">
+                    <div class="icon-circle mb-3 shadow-sm bg-white d-flex align-items-center justify-content-center border border-dark" style="width: 85px; height: 85px; border-radius: 50%;">
+                        <i class="fas fa-exclamation-triangle fa-2x text-dark"></i>
+                    </div>
+                    <div class="bg-white p-2 border border-dark w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 60px;">
+                        <h6 class="m-0 fw-bold small text-uppercase">Cuidado de Emergencia</h6>
+                    </div>
+                    <div class="bg-white p-3 border border-dark mb-3 w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 150px;">
+                        <p class="m-0" style="font-size: 0.85rem; line-height: 1.4;">No dude en buscar ayuda. La atención dental urgente suele recibirse el mismo día.</p>
+                    </div>
+                    <button class="btn btn-showcase-custom px-4" data-bs-toggle="modal" data-bs-target="#modalEmergencia">Leer Más</button>
+                </div>
+
+                <div class="col text-center d-flex flex-column align-items-center">
+                    <div class="icon-circle mb-3 shadow-sm bg-white d-flex align-items-center justify-content-center border border-dark" style="width: 85px; height: 85px; border-radius: 50%;">
+                        <i class="fas fa-tooth fa-2x text-dark"></i>
+                    </div>
+                    <div class="bg-white p-2 border border-dark w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 60px;">
+                        <h6 class="m-0 fw-bold small text-uppercase">Cuidado Dental General</h6>
+                    </div>
+                    <div class="bg-white p-3 border border-dark mb-3 w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 150px;">
+                        <p class="m-0" style="font-size: 0.85rem; line-height: 1.4;">La odontología general es para pacientes de todas las edades que ofrecen un cuidado dental completo e integral.</p>
+                    </div>
+                    <button class="btn btn-showcase-custom px-4" data-bs-toggle="modal" data-bs-target="#modalGeneral">Leer Más</button>
+                </div>
+
+                <div class="col text-center d-flex flex-column align-items-center">
+                    <div class="icon-circle mb-3 shadow-sm bg-white d-flex align-items-center justify-content-center border border-dark" style="width: 85px; height: 85px; border-radius: 50%;">
+                        <i class="fas fa-vial fa-2x text-dark"></i>
+                    </div>
+                    <div class="bg-white p-2 border border-dark w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 60px;">
+                        <h6 class="m-0 fw-bold small text-uppercase">Odontología Restauradora</h6>
+                    </div>
+                    <div class="bg-white p-3 border border-dark mb-3 w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 150px;">
+                        <p class="m-0" style="font-size: 0.85rem; line-height: 1.4;">Trabajamos para crear sonrisas Juveniles para pacientes cuyos dientes naturales requieren reemplazo.</p>
+                    </div>
+                    <button class="btn btn-showcase-custom px-4" data-bs-toggle="modal" data-bs-target="#modalRestauradora">Leer Más</button>
+                </div>
+
+                <div class="col text-center d-flex flex-column align-items-center">
+                    <div class="icon-circle mb-3 shadow-sm bg-white d-flex align-items-center justify-content-center border border-dark" style="width: 85px; height: 85px; border-radius: 50%;">
+                        <i class="far fa-smile fa-2x text-dark"></i>
+                    </div>
+                    <div class="bg-white p-2 border border-dark w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 60px;">
+                        <h6 class="m-0 fw-bold small text-uppercase">Odontología Cosmética</h6>
+                    </div>
+                    <div class="bg-white p-3 border border-dark mb-3 w-100 d-flex align-items-center justify-content-center" style="max-width: 220px; height: 150px;">
+                        <p class="m-0" style="font-size: 0.85rem; line-height: 1.4;">Una sonrisa bonita contribuye a un mejor estado de ánimo y aumenta la autoestima.</p>
+                    </div>
+                    <button class="btn btn-showcase-custom px-4" data-bs-toggle="modal" data-bs-target="#modalCosmetica">Leer Más</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="modalEmergencia" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0 border-dark border-2">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-uppercase">Cuidado de Emergencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3" style="color: #00BCD4;"></i>
+                    <p>Nuestra clínica está preparada para atender urgencias dentales el mismo día. Si tienes un dolor intenso o un accidente, no dudes en contactarnos de inmediato al 913 359 948.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalGeneral" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0 border-dark border-2">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-uppercase">Cuidado Dental General</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <i class="fas fa-tooth fa-3x mb-3" style="color: #00BCD4;"></i>
+                    <p>Ofrecemos limpiezas, diagnósticos y tratamientos preventivos para asegurar que la salud bucal de toda tu familia esté en óptimas condiciones. Prevenir es la mejor medicina.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalRestauradora" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0 border-dark border-2">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-uppercase">Odontología Restauradora</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <i class="fas fa-vial fa-3x mb-3" style="color: #00BCD4;"></i>
+                    <p>Recupera la funcionalidad de tu boca. Trabajamos para crear sonrisas juveniles en pacientes cuyos dientes naturales requieren reemplazo o reparación mediante calzas, coronas o puentes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalCosmetica" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0 border-dark border-2">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold text-uppercase">Odontología Cosmética</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <i class="far fa-smile fa-3x mb-3" style="color: #00BCD4;"></i>
+                    <p>Mejora tu sonrisa y aumenta tu autoestima. Realizamos blanqueamientos LED, carillas y diseños de sonrisa personalizados para que luzcas la mejor versión de ti mismo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!--  SERVICIOS  -->
+    <section class="services-section container py-5">
+        <div class="section-header text-center mb-5">
+            <h2 class="fw-bold text-uppercase">NUESTROS SERVICIOS</h2>
+            <p class="mx-auto text-muted mt-3" style="max-width: 800px; font-size: 0.9rem;">
+                Todos nuestros tratamientos y servicios se brindan en una clínica cómoda, diseñada con estándares de alta calidad.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4 text-center d-flex flex-column align-items-center">
+                <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
+                    <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
+                        <!-- CORREGIDO: Imagen Rehabilitación -->
+                        <img th:src="@{/img/rehabilitacion.jpg}" class="img-fluid w-100" alt="Rehabilitación"
+                             style="aspect-ratio: 4 / 5; object-fit: cover;">
+                    </div>
+                    <h5 class="fw-bold mb-2">Rehabilitación Dental</h5>
+                    <p class="text-muted px-2" style="font-size: 0.85rem;">
+                        Te ayudamos a volver a sonreír con confianza. Recupera la funcionalidad y estética de tu boca.
+                    </p>
+                </div>
+                <button class="btn btn-outline-dark mt-3 px-4 fw-bold rounded-1"
+                        data-bs-toggle="modal" data-bs-target="#modalRehabilita"
+                        style="transition: 0.3s;"
+                        onmouseover="this.style.backgroundColor='#00BCD4'; this.style.borderColor='#00BCD4'; this.style.color='white'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#212529'; this.style.color='#212529'">
+                    LEER MÁS
+                </button>
+            </div>
+
+            <div class="col-md-4 text-center d-flex flex-column align-items-center">
+                <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
+                    <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
+                        <img th:src="@{/img/periodoncia.jpg}" class="img-fluid w-100" alt="Periodoncia"
+                             style="aspect-ratio: 4 / 5; object-fit: cover;">
+                    </div>
+                    <h5 class="fw-bold mb-2">Periodoncia</h5>
+                    <p class="text-muted px-2" style="font-size: 0.85rem;">
+                        Protege tus encías y prevé enfermedades periodontales con nuestros servicios especializados.
+                    </p>
+                </div>
+                <button class="btn btn-outline-dark mt-3 px-4 fw-bold rounded-1"
+                        data-bs-toggle="modal" data-bs-target="#modalPeriodoncia"
+                        style="transition: 0.3s;"
+                        onmouseover="this.style.backgroundColor='#00BCD4'; this.style.borderColor='#00BCD4'; this.style.color='white'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#212529'; this.style.color='#212529'">
+                    LEER MÁS
+                </button>
+            </div>
+
+            <div class="col-md-4 text-center d-flex flex-column align-items-center">
+                <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
+                    <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
+                        <!-- CORREGIDO: Imagen Cirugía Dental -->
+                        <img th:src="@{/img/cirugia-dental.jpg}" class="img-fluid w-100" alt="Cirugía Dental"
+                             style="aspect-ratio: 4 / 5; object-fit: cover;">
+                    </div>
+                    <h5 class="fw-bold mb-2">Cirugía Dental</h5>
+                    <p class="text-muted px-2" style="font-size: 0.85rem;">
+                        Nos especializamos en la extracción de terceros molares (muelas del juicio) con total seguridad.
+                    </p>
+                </div>
+                <button class="btn btn-outline-dark mt-3 px-4 fw-bold rounded-1"
+                        data-bs-toggle="modal" data-bs-target="#modalCirugia"
+                        style="transition: 0.3s;"
+                        onmouseover="this.style.backgroundColor='#00BCD4'; this.style.borderColor='#00BCD4'; this.style.color='white'"
+                        onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#212529'; this.style.color='#212529'">
+                    LEER MÁS
+                </button>
+            </div>
+        </div>
+    </section>
+
+        <div class="modal fade" id="modalRehabilita" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-0 border-dark border-2 shadow-lg">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold text-uppercase" style="color: #00BCD4;">Rehabilitación Dental</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center p-4">
+                        <div class="mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border: 2px solid #00BCD4; border-radius: 50%;">
+                            <i class="fas fa-tooth fa-2x" style="color: #00BCD4;"></i>
+                        </div>
+                        <p class="text-muted">La rehabilitación oral devuelve la función estética y armonía bucal mediante prótesis dentales de alta calidad. Utilizamos materiales cerámicos y tecnología digital para asegurar un ajuste perfecto y natural.</p>
+                        <ul class="list-unstyled text-start mx-auto d-inline-block small">
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Prótesis fijas y removibles.</li>
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Coronas de porcelana y zirconio.</li>
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Restauración post-implante.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer border-0 pt-0 justify-content-center">
+                        <button type="button" class="btn btn-outline-dark rounded-0 fw-bold px-4" data-bs-dismiss="modal">CERRAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalPeriodoncia" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-0 border-dark border-2 shadow-lg">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold text-uppercase" style="color: #00BCD4;">Periodoncia Especializada</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center p-4">
+                        <div class="mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border: 2px solid #00BCD4; border-radius: 50%;">
+                            <i class="fas fa-shield-alt fa-2x" style="color: #00BCD4;"></i>
+                        </div>
+                        <p class="text-muted">Cuidamos el soporte de tus dientes. Tratamos enfermedades de las encías (gingivitis y periodontitis) para evitar la pérdida dental y mejorar tu salud sistémica.</p>
+                        <ul class="list-unstyled text-start mx-auto d-inline-block small">
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Raspaje y alisado radicular.</li>
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Tratamiento de encías sangrantes.</li>
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Cirugía plástica periodontal.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer border-0 pt-0 justify-content-center">
+                        <button type="button" class="btn btn-outline-dark rounded-0 fw-bold px-4" data-bs-dismiss="modal">CERRAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalCirugia" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-0 border-dark border-2 shadow-lg">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold text-uppercase" style="color: #00BCD4;">Cirugía Dental Segura</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center p-4">
+                        <div class="mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; border: 2px solid #00BCD4; border-radius: 50%;">
+                            <i class="fas fa-hospital-user fa-2x" style="color: #00BCD4;"></i>
+                        </div>
+                        <p class="text-muted">Realizamos procedimientos quirúrgicos con la máxima bioseguridad. Somos expertos en extracciones complejas y cirugías de terceros molares con recuperación rápida.</p>
+                        <ul class="list-unstyled text-start mx-auto d-inline-block small">
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Extracción de muelas del juicio.</li>
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Biopsias y remoción de quistes.</li>
+                            <li><i class="fas fa-check me-2" style="color: #00BCD4;"></i> Cirugías pre-protésicas.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer border-0 pt-0 justify-content-center">
+                        <button type="button" class="btn btn-outline-dark rounded-0 fw-bold px-4" data-bs-dismiss="modal">CERRAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- TABLA -->
+    <section class="tarifas container py-5">
+        <div class="section-header text-center mb-4">
+            <span class="section-subtitle">NUESTRAS TARIFAS</span>
+            <h2 class="section-title">Precios de Referencia</h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Tratamiento</th>
+                        <th>Duración</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Limpieza Dental Completa</td>
+                        <td>45 min</td>
+                        <td>S/ 150.00</td>
+                    </tr>
+                    <tr>
+                        <td>Blanqueamiento LED</td>
+                        <td>1 hora</td>
+                        <td>S/ 500.00</td>
+                    </tr>
+                    <tr>
+                        <td>Implante Dental (Titanio)</td>
+                        <td>2 - 4 meses</td>
+                        <td>S/ 2,500.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!--  TESTIMONIOS  -->
+    <section class="testimonios py-5">
+        <div class="container">
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-8 text-center">
+                    <span class="section-subtitle">TESTIMONIOS</span>
+                    <h2 class="section-title">Lo que dicen nuestros pacientes</h2>
+                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tincidunt sagittis eros. Quisque quis euismod lorem.</p>
+                </div>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-5">
+                    <div class="card h-100 shadow-sm border-0 p-4 card-testimonio">
+                        <div class="card-body text-center">
+                            <p class="card-text mb-5">
+                                "Me sentí acogida y segura durante todo el proceso. El equipo de TuDentaria es altamente capacitado y muy amable."
+                            </p>
+
+                            <div class="d-flex align-items-center justify-content-start">
+                                <div class="user-avatar me-3">
+                                    <img th:src="@{/img/testimonio2.jpg}" class="img-testimonio" alt="Nancy G. O.">
+                                </div>
+                                <div class="text-start">
+                                    <h6 class="fw-bold mb-0">Celina F. O.</h6>
+                                    <small class="text-muted">Paciente</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="card h-100 shadow-sm border-0 p-4 card-testimonio">
+                        <div class="card-body text-center">
+                            <p class="card-text mb-5">
+                                "Gracias a TuDentaria mejoró mi sonrisa y mi confianza. Los resultados han sido duraderos"
+                            </p>
+
+                            <div class="d-flex align-items-center justify-content-start">
+                                <div class="user-avatar me-3">
+                                    <img th:src="@{/img/testimonio1.jpg}" class="img-testimonio" alt="Nancy G. O.">
+                                </div>
+                                <div class="text-start">
+                                    <h6 class="fw-bold mb-0">Nancy G. O.</h6>
+                                    <small class="text-muted">Paciente</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--  FORMULARIO DE CONTACTO -->
+    <section class="contacto py-5" id="contacto">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="fw-bold">SOLICITUD DE CITAS</h2>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+
+                    <!-- Alertas de Éxito o Error General -->
+                    <div th:if="${exitoCita}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i> <span th:text="${exitoCita}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${errorCita}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${errorCita}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <form th:action="@{/solicitar-cita}" th:object="${cita}" method="POST" class="contact-form bg-white p-4 p-md-5 shadow-sm" style="border-radius: 8px;">
+                        <div class="row g-4">
+
+                            <div class="col-md-6 form-group">
+                                <input type="text" th:field="*{nombre}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Nombre" style="font-size: 0.9rem;">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <input type="text" th:field="*{apellido}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Apellido" style="font-size: 0.9rem;">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <input type="tel" th:field="*{telephone}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Número de Teléfono" style="font-size: 0.9rem;">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></div>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <input type="email" th:field="*{email}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="E-mail" style="font-size: 0.9rem;">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <input type="text" th:field="*{motivo}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Motivo de tu visita" style="font-size: 0.9rem;">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}"></div>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <input type="date" th:field="*{fecha}" class="form-control rounded-1 border-secondary-subtle py-2.5" style="font-size: 0.9rem; color: #6c757d;">
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></div>
+                            </div>
+
+                            <div class="col-12 form-group">
+                                <textarea th:field="*{notas}" class="form-control rounded-1 border-secondary-subtle py-2.5" placeholder="Notas para el doctor" rows="6" style="font-size: 0.9rem; resize: none;"></textarea>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('notas')}" th:errors="*{notas}"></div>
+                            </div>
+
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-outline-dark px-5 py-2.5 fw-bold rounded-1 btn-form text-uppercase"
+                                        style="transition: 0.3s; letter-spacing: 1px; font-size: 0.9rem;"
+                                        onmouseover="this.style.backgroundColor='#00BCD4'; this.style.borderColor='#00BCD4'; this.style.color='white'"
+                                        onmouseout="this.style.backgroundColor='transparent'; this.style.borderColor='#212529'; this.style.color='#212529'">
+                                    SOLICITAR CITA
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--  FOOTER  -->
+    <footer class="footer pt-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <img th:src="@{/img/logo.png}" alt="Tu Dentaria Logo" class="footer-logo">
+                    <p>Somos una clínica dental moderna, especializada en diagnósticos y tratamientos avanzados para profesionales de la salud.</p>
+                    <a th:href="@{/contacto}" class="btn-footer">Atención al Cliente</a>
+                </div>
+                <div class="col-md-4">
+                    <h4>Nuestros Servicios</h4>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/servicios}">Periodoncia</a></li>
+                        <li><a th:href="@{/servicios}">Cirugía Dental</a></li>
+                        <li><a th:href="@{/servicios}">Implantes dentales</a></li>
+                        <li><a th:href="@{/servicios}">Estética Dental</a></li>
+                        <li><a th:href="@{/servicios}">Ortodoncia</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4>Horarios</h4>
+                    <ul class="list-unstyled">
+                        <li class="d-flex justify-content-between"><span>Lunes - Viernes</span> <span>8:00 - 18:00</span></li>
+                        <li class="d-flex justify-content-between"><span>Sábado</span> <span>9:00 - 13:00</span></li>
+                        <li class="d-flex justify-content-between"><span>Domingo</span> <span>Cerrado</span></li>
+                    </ul>
+
+                    <h4 class="mt-4">Redes Sociales</h4>
+                    <div class="d-flex gap-3">
+                        <a href="https://www.instagram.com/tu.dentaria/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@tudentaria" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/913359948" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center mt-4 py-3">
+            <p class="mb-0">&copy; 2026 TuDentaria. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <a href="#" class="scroll-up">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <script>
+        if (window.location.search.includes('logout')) {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.pathname);
+            }
+        }
+    </script>
+</body>
+
+</html>
