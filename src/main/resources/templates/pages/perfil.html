@@ -34,6 +34,11 @@
         <div th:text="${exito}" class="fw-semibold small"></div>
       </div>
 
+      <div th:if="${error}" class="alert alert-danger border-0 shadow-sm d-flex align-items-center mb-4 p-3 rounded-3" role="alert" style="background-color: #fde8e8; color: #e02424;">
+        <i class="fas fa-exclamation-circle fa-lg me-2"></i>
+        <div th:text="${error}" class="fw-semibold small"></div>
+      </div>
+
       <div class="card border-0 bg-white shadow-sm p-4 md-p-5" style="border-radius: 16px;">
 
         <div class="d-flex align-items-center mb-4 pb-3 border-bottom">

@@ -29,10 +29,8 @@ public class PerfilController {
             return "redirect:/login";
         }
 
-        String nombreUsuario = authentication.getName();
-        Optional<Usuario> usuarioOpt = usuarioRepository.findAll().stream()
-                .filter(u -> u.getNombre().equals(nombreUsuario))
-                .findFirst();
+        String emailUsuario = authentication.getName();
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(emailUsuario);
 
         if (usuarioOpt.isPresent()) {
             model.addAttribute("usuario", usuarioOpt.get());
@@ -52,16 +50,22 @@ public class PerfilController {
             return "redirect:/login";
         }
 
-        String nombreActualSesion = authentication.getName();
-        Usuario usuarioExistente = usuarioRepository.findAll().stream()
-                .filter(u -> u.getNombre().equals(nombreActualSesion))
-                .findFirst()
-                .orElse(null);
+        String emailActualSesion = authentication.getName();
+        Usuario usuarioExistente = usuarioRepository.findByEmail(emailActualSesion).orElse(null);
 
         if (usuarioExistente != null) {
+            // Si el correo cambia, validar que no pertenezca a otra cuenta
+            if (!usuarioExistente.getEmail().equalsIgnoreCase(datosActualizados.getEmail())) {
+                Optional<Usuario> emailEnUso = usuarioRepository.findByEmail(datosActualizados.getEmail());
+                if (emailEnUso.isPresent()) {
+                    redirectAttributes.addFlashAttribute("error", "El correo ingresado ya se encuentra registrado por otro usuario.");
+                    return "redirect:/perfil";
+                }
+                usuarioExistente.setEmail(datosActualizados.getEmail());
+            }
+
             usuarioExistente.setNombre(datosActualizados.getNombre());
             usuarioExistente.setApellido(datosActualizados.getApellido());
-            usuarioExistente.setEmail(datosActualizados.getEmail());
 
             usuarioRepository.save(usuarioExistente);
             redirectAttributes.addFlashAttribute("exito", "Tus datos personales se actualizaron correctamente.");

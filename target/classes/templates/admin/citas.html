@@ -3,95 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Citas - Tu Dentaria</title>
+  <title>Tu Dentaria - Gestión de Citas</title>
+  <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
+  <!-- Bootstrap & FontAwesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <style>
-    :root { --sidebar-width: 260px; --primary-color: #1f4b61; --bg-light: #f4f7f6; }
-    body { background-color: var(--bg-light); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-    .sidebar { width: var(--sidebar-width); height: 100vh; position: fixed; top: 0; left: 0; background-color: #1e293b; color: #cbd5e1; z-index: 100; }
-    .sidebar-brand { padding: 1.2rem 1rem; background-color: #111827; border-bottom: 1px solid #1f2937; display: flex; align-items: center; justify-content: center; }
-    .sidebar-brand img { max-height: 45px; object-fit: contain; }
-    .sidebar-menu { padding: 1rem 0; list-style: none; margin: 0; }
-    .menu-header { padding: 0.6rem 1.5rem 0.3rem 1.5rem; font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700; }
-    .menu-item a { display: flex; align-items: center; padding: 0.7rem 1.5rem; color: #94a3b8; text-decoration: none; font-size: 0.9rem; font-weight: 500; }
-    .menu-item a:hover, .menu-item.active a { color: #fff; background-color: #334155; }
-    .menu-item a i { width: 24px; margin-right: 10px; }
-    .main-content { margin-left: var(--sidebar-width); min-height: 100vh; padding: 2rem; }
-  </style>
+  <!-- Estilos del Panel Admin -->
+  <link th:href="@{/css/admin.css}" rel="stylesheet">
 </head>
 <body>
 
-<div class="sidebar">
+<!-- BACKDROP PARA MÓVILES -->
+<div class="sidebar-backdrop"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
   <div class="sidebar-brand">
-    <img th:src="@{/img/logo.png}" alt="Logo">
-  </div>
-  <ul class="sidebar-menu">
-    <li class="menu-item"><a th:href="@{/admin/dashboard}"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
-    <li class="menu-header">Atención</li>
-    <li class="menu-item active"><a th:href="@{/admin/citas}"><i class="fas fa-calendar-check"></i> Citas</a></li>
-    <li class="menu-header">Personal Clínico</li>
-    <li class="menu-item">
-      <a th:href="@{/admin/doctores}"><i class="fas fa-stethoscope"></i> Doctores</a>
-    </li>
-    <li class="menu-header">Seguridad</li>
-    <li class="menu-item"><a th:href="@{/admin/usuarios}"><i class="fas fa-user-plus"></i> Crear Cuentas</a></li>
-    <li class="menu-header">Portal</li>
-    <li class="menu-item"><a th:href="@{/}"><i class="fas fa-arrow-left"></i> Volver a la Web</a></li>
-  </ul>
-</div>
-
-<div class="main-content">
-  <div class="mb-4">
-    <h3 class="fw-bold m-0" style="color: var(--primary-color);">Control de Citas</h3>
-    <p class="text-muted small m-0">Gestiona las solicitudes, estados clínicos y notas internas</p>
+    <a th:href="@{/admin/dashboard}">
+      <img th:src="@{/img/logo.png}" alt="Tu Dentaria Logo">
+    </a>
+    <button class="sidebar-close-btn d-lg-none" id="sidebarClose" aria-label="Cerrar menú">
+      <i class="fas fa-times"></i>
+    </button>
   </div>
 
-  <div th:if="${exito}" class="alert alert-success alert-dismissible fade show" role="alert">
+  <div class="sidebar-content">
+    <ul class="sidebar-menu">
+      <li class="menu-item">
+        <a th:href="@{/admin/dashboard}"><i class="fas fa-chart-pie"></i> Dashboard</a>
+      </li>
+
+      <li class="menu-header">Atención Clínica</li>
+      <li class="menu-item active">
+        <a th:href="@{/admin/citas}"><i class="fas fa-calendar-check"></i> Gestión de Citas</a>
+      </li>
+
+      <li class="menu-header">Personal Médico</li>
+      <li class="menu-item">
+        <a th:href="@{/admin/doctores}"><i class="fas fa-user-md"></i> Doctores</a>
+      </li>
+
+      <li class="menu-header">Seguridad & Accesos</li>
+      <li class="menu-item">
+        <a th:href="@{/admin/usuarios}"><i class="fas fa-users-cog"></i> Cuentas de Usuario</a>
+      </li>
+
+      <li class="menu-header">Sitio Web</li>
+      <li class="menu-item">
+        <a th:href="@{/}"><i class="fas fa-external-link-alt"></i> Volver al Portal</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="small text-muted">v1.2 Clínico</div>
+      <span class="badge bg-success-subtle text-success small fw-semibold">Online</span>
+    </div>
+  </div>
+</aside>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="main-content">
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <button class="sidebar-toggle-btn d-lg-none" id="sidebarToggle" aria-label="Abrir menú">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h5 class="top-bar-title m-0">Control de Solicitudes</h5>
+    </div>
+
+    <div class="top-bar-right">
+      <div class="user-badge">
+        <div class="user-avatar">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <span class="user-name">Administrador</span>
+      </div>
+
+      <form th:action="@{/logout}" method="POST" class="m-0">
+        <button type="submit" class="btn btn-outline-danger btn-logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Salir</span>
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- CABECERA DE PÁGINA -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Gestión de Citas Médicas</h2>
+      <p class="page-subtitle">Revisa solicitudes de pacientes, cambia estados y añade notas clínicas</p>
+    </div>
+  </div>
+
+  <!-- ALERTAS -->
+  <div th:if="${exito}" class="alert alert-success alert-dismissible fade show border-0 shadow-sm mb-4 rounded-3 d-flex align-items-center" role="alert" style="background-color: #def7ec; color: #03543f;">
+    <i class="fas fa-check-circle fa-lg me-2"></i>
     <span th:text="${exito}"></span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
   </div>
-  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <div th:if="${error}" class="alert alert-danger alert-dismissible fade show border-0 shadow-sm mb-4 rounded-3 d-flex align-items-center" role="alert" style="background-color: #fde8e8; color: #e02424;">
+    <i class="fas fa-exclamation-circle fa-lg me-2"></i>
     <span th:text="${error}"></span>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
   </div>
 
-  <div class="card border-0 shadow-sm p-4" style="border-radius: 12px;">
+  <!-- TABLA DE CITAS -->
+  <div class="card-table-container">
     <div class="table-responsive">
-      <table class="table table-hover align-middle m-0">
-        <thead class="table-light">
+      <table class="table custom-table align-middle">
+        <thead>
         <tr>
           <th>Paciente</th>
           <th>Contacto</th>
-          <th>Motivo</th>
-          <th>Fecha Cita</th>
+          <th>Motivo de Consulta</th>
+          <th>Fecha Solicitada</th>
           <th>Estado</th>
           <th class="text-end">Acciones</th>
         </tr>
         </thead>
         <tbody>
+        <tr th:if="${#lists.isEmpty(citas)}">
+          <td colspan="6" class="text-center py-5 text-muted">
+            <i class="far fa-calendar-times fa-3x mb-3 text-secondary d-block"></i>
+            No hay citas registradas en el sistema.
+          </td>
+        </tr>
         <tr th:each="c : ${citas}">
           <td>
-            <span class="fw-bold text-dark" th:text="${c.nombre + ' ' + c.apellido}">Nombre</span>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 38px; height: 38px; font-size: 0.85rem;">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <span class="fw-bold text-dark d-block" th:text="${c.nombre + ' ' + c.apellido}">Nombre Paciente</span>
+                <span th:if="${c.notas != null and !c.notas.isEmpty()}" class="badge bg-light text-muted border small" style="font-size: 0.68rem;">
+                  <i class="fas fa-sticky-note me-1"></i> Con notas
+                </span>
+              </div>
+            </div>
           </td>
           <td>
-            <span class="d-block small text-muted" th:text="${c.email}">Email</span>
-            <span class="d-block small text-muted" th:text="${c.telephone}">Teléfono</span>
+            <div class="small">
+              <div class="text-dark"><i class="far fa-envelope me-1 text-muted"></i><span th:text="${c.email}">email@ejemplo.com</span></div>
+              <div class="text-muted"><i class="fas fa-phone-alt me-1 text-muted"></i><span th:text="${c.telephone}">987654321</span></div>
+            </div>
           </td>
-          <td th:text="${c.motivo}">Motivo</td>
-          <td th:text="${c.fecha}">Fecha</td>
           <td>
-            <span th:if="${c.estado == 'PENDIENTE'}" class="badge bg-warning text-dark">PENDIENTE</span>
-            <span th:if="${c.estado == 'ATENDIDO'}" class="badge bg-success">ATENDIDO</span>
+            <span class="badge bg-light text-dark border fw-medium px-2.5 py-1.5" th:text="${c.motivo}">Limpieza Dental</span>
+          </td>
+          <td>
+            <div class="fw-semibold text-dark">
+              <i class="far fa-calendar-alt me-1 text-info"></i>
+              <span th:text="${c.fecha}">2026-08-20</span>
+            </div>
+          </td>
+          <td>
+            <span th:if="${c.estado == 'PENDIENTE'}" class="badge-status badge-pending">
+              <i class="fas fa-hourglass-half"></i> PENDIENTE
+            </span>
+            <span th:if="${c.estado == 'ATENDIDO'}" class="badge-status badge-attended">
+              <i class="fas fa-check-double"></i> ATENDIDO
+            </span>
           </td>
           <td class="text-end">
-            <button class="btn btn-sm btn-outline-warning me-1"
+            <button class="btn btn-sm btn-outline-warning btn-action me-1"
                     th:data-id="${c.id}" th:data-estado="${c.estado}" th:data-notas="${c.notas}"
-                    onclick="abrirGestion(this)">
-              <i class="fas fa-edit"></i> Gestionar
+                    onclick="abrirGestion(this)" title="Gestionar Cita">
+              <i class="fas fa-edit"></i>
             </button>
-            <a th:href="@{/admin/citas/eliminar/{id}(id=${c.id})}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar esta solicitud de cita?')">
-              <i class="fas fa-trash"></i>
+            <a th:href="@{/admin/citas/eliminar/{id}(id=${c.id})}" class="btn btn-sm btn-outline-danger btn-action" onclick="return confirm('¿Estás seguro de eliminar esta solicitud de cita?')" title="Eliminar Cita">
+              <i class="fas fa-trash-alt"></i>
             </a>
           </td>
         </tr>
@@ -99,34 +185,37 @@
       </table>
     </div>
   </div>
-</div>
 
-<!-- MODAL GESTIÓN -->
+</main>
+
+<!-- MODAL GESTIÓN DE CITA -->
 <div class="modal fade" id="modalCita" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title fw-bold">Gestionar Cita</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title"><i class="fas fa-notes-medical me-2"></i>Gestionar Cita Clínica</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <form th:action="@{/admin/citas/actualizar}" method="POST">
         <input type="hidden" id="citaId" name="id">
         <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label small fw-bold">Estado de Atención</label>
-            <select name="estado" id="citaEstado" class="form-select form-select-sm" required>
-              <option value="PENDIENTE">PENDIENTE</option>
-              <option value="ATENDIDO">ATENDIDO</option>
+            <label class="form-label">Estado de la Cita</label>
+            <select name="estado" id="citaEstado" class="form-select" required>
+              <option value="PENDIENTE">PENDIENTE (En espera)</option>
+              <option value="ATENDIDO">ATENDIDO (Completada)</option>
             </select>
           </div>
           <div class="mb-3">
-            <label class="form-label small fw-bold">Notas del Doctor</label>
-            <textarea name="notas" id="citaNotas" class="form-control form-control-sm" rows="5" style="resize:none;"></textarea>
+            <label class="form-label">Notas Clínicas / Observaciones</label>
+            <textarea name="notas" id="citaNotas" class="form-control" rows="4" placeholder="Escribe detalles del tratamiento, presupuesto acordado o comentarios de la visita..."></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary-custom px-4">
+            <i class="fas fa-save me-1"></i> Guardar Cambios
+          </button>
         </div>
       </form>
     </div>
@@ -134,6 +223,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/scripts/admin.js}"></script>
 <script>
   function abrirGestion(btn) {
       document.getElementById('citaId').value = btn.getAttribute('data-id');

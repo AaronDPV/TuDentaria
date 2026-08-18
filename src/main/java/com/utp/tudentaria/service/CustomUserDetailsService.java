@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
 
         return new User(
-                usuario.getNombre(),
+                usuario.getEmail(),
                 usuario.getPassword(),
                 usuario.getRoles().stream()
                         .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))

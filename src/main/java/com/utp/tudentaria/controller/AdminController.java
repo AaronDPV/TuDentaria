@@ -1,5 +1,6 @@
 package com.utp.tudentaria.controller;
 
+import com.utp.tudentaria.model.Usuario;
 import com.utp.tudentaria.repository.CitaRepository;
 import com.utp.tudentaria.repository.DoctorRepository;
 import com.utp.tudentaria.repository.UsuarioRepository;
@@ -32,14 +33,14 @@ public class AdminController {
         }
 
         long totalUsuarios = usuarioRepository.count();
-
         long totalDoctores = doctorRepository.count();
+        long citasPendientes = citaRepository.countByEstadoIgnoreCase("PENDIENTE");
 
-        long citasPendientes = citaRepository.findAll().stream()
-                .filter(c -> "PENDIENTE".equalsIgnoreCase(c.getEstado()))
-                .count();
+        String nombreAdmin = usuarioRepository.findByEmail(authentication.getName())
+                .map(Usuario::getNombre)
+                .orElse("Administrador");
 
-        model.addAttribute("nombreAdmin", authentication.getName());
+        model.addAttribute("nombreAdmin", nombreAdmin);
         model.addAttribute("totalUsuarios", totalUsuarios);
         model.addAttribute("totalDoctores", totalDoctores);
         model.addAttribute("citasPendientes", citasPendientes);

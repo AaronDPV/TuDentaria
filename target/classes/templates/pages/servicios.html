@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tu Dentaria</title>
-    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- CSS Personalizado -->
-    <link href="../css/styles.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -137,12 +137,12 @@
                         un ambiente confortable y de lujo. Los nuevos pacientes son bienvenidos con una consulta de
                         salud bucal de cortesía.
                     </p>
-                    <a href="contacto.html" class="btn btn-outline-light fw-bold px-4 py-2 rounded-3">SOLICITAR CITA</a>
+                    <a th:href="@{/contacto}" class="btn btn-outline-light fw-bold px-4 py-2 rounded-3">SOLICITAR CITA</a>
                 </div>
                 
                 <div class="col-lg-5">
                     <div class="shadow rounded-3 overflow-hidden border border-white border-5">
-                        <img src="../img/rehabilitacion.jpg" class="img-fluid w-100 d-block" alt="Carillas de Porcelana">
+                        <img th:src="@{/img/rehabilitacion.jpg}" class="img-fluid w-100 d-block" alt="Carillas de Porcelana">
                     </div>
                 </div>
             </div>
@@ -163,7 +163,7 @@
             <div class="col-md-4 text-center d-flex flex-column align-items-center">
                 <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
                     <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
-                        <img src="../img/rehabilitacion.jpg" class="img-fluid w-100" alt="Rehabilitación" style="aspect-ratio: 4 / 5; object-fit: cover;">
+                        <img th:src="@{/img/rehabilitacion.jpg}" class="img-fluid w-100" alt="Rehabilitación" style="aspect-ratio: 4 / 5; object-fit: cover;">
                     </div>
                     <h5 class="fw-bold mb-2">Rehabilitación Dental</h5>
                     <p class="text-muted px-2" style="font-size: 0.85rem;">
@@ -182,7 +182,7 @@
             <div class="col-md-4 text-center d-flex flex-column align-items-center">
                 <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
                     <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
-                        <img src="../img/periodoncia.jpg" class="img-fluid w-100" alt="Periodoncia" style="aspect-ratio: 4 / 5; object-fit: cover;">
+                        <img th:src="@{/img/periodoncia.jpg}" class="img-fluid w-100" alt="Periodoncia" style="aspect-ratio: 4 / 5; object-fit: cover;">
                     </div>
                     <h5 class="fw-bold mb-2">Periodoncia</h5>
                     <p class="text-muted px-2" style="font-size: 0.85rem;">
@@ -201,7 +201,7 @@
             <div class="col-md-4 text-center d-flex flex-column align-items-center">
                 <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
                     <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
-                        <img src="../img/cirugia-dental.jpg" class="img-fluid w-100" alt="Cirugía Dental" style="aspect-ratio: 4 / 5; object-fit: cover;">
+                        <img th:src="@{/img/cirugia-dental.jpg}" class="img-fluid w-100" alt="Cirugía Dental" style="aspect-ratio: 4 / 5; object-fit: cover;">
                     </div>
                     <h5 class="fw-bold mb-2">Cirugía Dental</h5>
                     <p class="text-muted px-2" style="font-size: 0.85rem;">
@@ -220,7 +220,7 @@
             <div class="col-md-4 text-center d-flex flex-column align-items-center">
                 <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
                     <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
-                        <img src="../img/ortodoncia.jpg" class="img-fluid w-100" alt="Ortodoncia" style="aspect-ratio: 4 / 5; object-fit: cover;">
+                        <img th:src="@{/img/ortodoncia.jpg}" class="img-fluid w-100" alt="Ortodoncia" style="aspect-ratio: 4 / 5; object-fit: cover;">
                     </div>
                     <h5 class="fw-bold mb-2">Ortodoncia</h5>
                     <p class="text-muted px-2" style="font-size: 0.85rem;">
@@ -239,7 +239,7 @@
             <div class="col-md-4 text-center d-flex flex-column align-items-center">
                 <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
                     <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
-                        <img src="../img/implantes-dentales.jpg" class="img-fluid w-100" alt="Implantes dentales" style="aspect-ratio: 4 / 5; object-fit: cover;">
+                        <img th:src="@{/img/implantes-dentales.jpg}" class="img-fluid w-100" alt="Implantes dentales" style="aspect-ratio: 4 / 5; object-fit: cover;">
                     </div>
                     <h5 class="fw-bold mb-2">Implantes dentales</h5>
                     <p class="text-muted px-2" style="font-size: 0.85rem;">
@@ -258,7 +258,7 @@
             <div class="col-md-4 text-center d-flex flex-column align-items-center">
                 <div class="p-4 w-100 bg-body-tertiary border-0 shadow-sm" style="min-height: 520px; border-radius: 8px;">
                     <div class="mb-4 border border-dark overflow-hidden mx-auto" style="max-width: 90%;">
-                        <img src="../img/estetica.jpg" class="img-fluid w-100" alt="Estética Dental" style="aspect-ratio: 4 / 5; object-fit: cover;">
+                        <img th:src="@{/img/estetica.jpg}" class="img-fluid w-100" alt="Estética Dental" style="aspect-ratio: 4 / 5; object-fit: cover;">
                     </div>
                     <h5 class="fw-bold mb-2">Estética Dental</h5>
                     <p class="text-muted px-2" style="font-size: 0.85rem;">
@@ -475,7 +475,7 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <script src="../scripts/main.js"></script>
+    <script th:src="@{/scripts/main.js}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>

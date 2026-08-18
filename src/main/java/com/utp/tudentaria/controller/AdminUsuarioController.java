@@ -40,7 +40,7 @@ public class AdminUsuarioController {
 
     @PostMapping("/guardar")
     public String guardarUsuario(@ModelAttribute("usuario") Usuario usuario,
-                                 @RequestParam("idRol") Long idRol,
+                                 @RequestParam("idRol") Integer idRol,
                                  RedirectAttributes redirectAttributes) {
 
         if (usuario.getId() == null) {

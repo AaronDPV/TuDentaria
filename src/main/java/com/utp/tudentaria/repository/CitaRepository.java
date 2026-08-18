@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
+    long countByEstadoIgnoreCase(String estado);
 }
