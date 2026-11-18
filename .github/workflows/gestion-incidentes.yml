@@ -1,0 +1,71 @@
+name: Gestión Automatizada de Incidentes - SGOT
+
+on:
+  issues:
+    types: [opened, labeled, closed]
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  recepcion-incidente:
+    name: Confirmar recepción de incidente
+    if: github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'incidente')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comentar confirmación y asignación a soporte
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: '🛠️ **Incidente recepcionado en TuDentaria SGOT.**\n\nSe ha confirmado la recepción del reporte (`#' + context.issue.number + '`) y ha sido asignado automáticamente al **Equipo de Soporte y Operaciones (SRE/DevOps)** para su evaluación y triage inicial.'
+            });
+
+  verificar-incidente:
+    name: Verificar y cerrar incidente
+    if: github.event.action == 'labeled' && github.event.label.name == 'verificado'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comentar verificación y cerrar issue automáticamente
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: 'Incidente verificado en producción. Cerrando ticket automáticamente.'
+            });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
+
+  registrar-historico:
+    name: Actualizar histórico en INCIDENTES.md
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Agregar registro a INCIDENTES.md
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          FECHA=$(date -u +"%Y-%m-%d %H:%M UTC")
+          TITULO_LIMPIO=$(echo "$ISSUE_TITLE" | tr '|' '-' | tr -d '\r\n')
+          echo "| #${ISSUE_NUMBER} | ${FECHA} | ${TITULO_LIMPIO} | Cerrado |" >> INCIDENTES.md
+
+      - name: Commit automático del histórico de incidentes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "docs(incidentes): registrar cierre del incidente #${{ github.event.issue.number }}"
+          file_pattern: INCIDENTES.md

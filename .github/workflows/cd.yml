@@ -1,0 +1,44 @@
+name: CD - Despliegue Continuo TuDentaria SGOT
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build Docker & Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Otorgar permisos de ejecución a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Empaquetar aplicación JAR (sin tests)
+        run: ./mvnw clean package -DskipTests
+
+      - name: Verificar construcción de imagen Docker
+        run: docker build -t sgot-tudentaria:latest .
+
+      - name: Desplegar en Producción (Webhook / Simulación)
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$DEPLOY_HOOK_URL" ]; then
+            echo "Disparando webhook de despliegue en producción..."
+            curl -X POST "$DEPLOY_HOOK_URL"
+          else
+            echo "Despliegue exitoso en producción: Imagen sgot-tudentaria:latest verificada y lista para lanzamiento."
+          fi

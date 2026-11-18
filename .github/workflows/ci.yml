@@ -1,0 +1,41 @@
+name: CI - Integración Continua TuDentaria SGOT
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-and-test:
+    name: Build & Unit Tests (Spring Boot 3.3.5 / Java 17)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 17 (Temurin) y caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Otorgar permisos de ejecución a Maven Wrapper
+        run: chmod +x mvnw
+
+      - name: Compilar y ejecutar pruebas unitarias
+        env:
+          SPRING_DATASOURCE_URL: jdbc:h2:mem:tudentaria_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+          SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+          SPRING_DATASOURCE_USERNAME: sa
+          SPRING_DATASOURCE_PASSWORD: ""
+          SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.H2Dialect
+          SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.H2Dialect
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+        run: ./mvnw clean test

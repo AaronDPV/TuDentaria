@@ -1,0 +1,57 @@
+name: Reporte de Incidente - SGOT
+description: Formulario para reportar incidentes operativos o técnicos en el Sistema de Gestión Odontológica TuDentaria (SGOT).
+title: "[INCIDENTE] [sev: S2] Breve descripción"
+labels: ["incidente", "en-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Sistema de Gestión Odontológica TuDentaria (SGOT)
+        Complete los siguientes campos obligatorios para registrar y clasificar el incidente en producción o entorno de pruebas.
+
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo Afectado
+      description: Seleccione el módulo del sistema SGOT donde se presenta el incidente.
+      options:
+        - "Reserva y Agendamiento de Citas"
+        - "Historial Clínico y Odontograma"
+        - "Seguimiento de Tratamientos"
+        - "Facturación SUNAT"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Nivel de Severidad
+      description: Clasifique la criticidad del incidente según su impacto operativo.
+      options:
+        - "S1 - Crítico"
+        - "S2 - Alto"
+        - "S3 - Medio"
+        - "S4 - Bajo"
+    validations:
+      required: true
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción del Incidente
+      description: Detalle el impacto operativo, los síntomas observados y los pasos para reproducir el problema.
+      placeholder: |
+        1. Impacto: ...
+        2. Síntomas: ...
+        3. Pasos para reproducir: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: Evidencia (Logs o Capturas)
+      description: Adjunte trazas de error (stacktrace), logs del servidor o capturas de pantalla.
+      placeholder: Pegue aquí los logs relevantes o arrastre capturas de pantalla...
+    validations:
+      required: true
